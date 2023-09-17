@@ -55,6 +55,11 @@ export class CreateProductPtDTO {
   carenciaEntreResgates: number;
 }
 
+export class CreateProductResponseDTO {
+  @ApiProperty()
+  id: string;
+}
+
 export class CreateProductDTO {
   susep: string;
   saleExpiration: string;

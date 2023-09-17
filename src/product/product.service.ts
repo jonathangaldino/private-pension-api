@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { isDateValid } from 'src/core/helpers/dateParser';
 import { ServiceResponse } from 'src/core/interfaces/service.interfaces';
 import { PrismaService } from 'src/prisma.service';
 import { CreateProductDTO } from './dto/create-product.dto';
 import { ProductEntity } from './entities/product.entity';
+import { InvalidSaleExpirationDateError } from './product.errors';
 
-export type ProductServiceErrors = void;
+export type ProductServiceErrors = InvalidSaleExpirationDateError;
 
 @Injectable()
 export class ProductService {
@@ -13,8 +15,20 @@ export class ProductService {
   async create(
     createProductDto: CreateProductDTO,
   ): Promise<ServiceResponse<ProductEntity, ProductServiceErrors>> {
+    if (!isDateValid(createProductDto.saleExpiration)) {
+      return {
+        error: new InvalidSaleExpirationDateError(),
+        data: null,
+      };
+    }
+
+    const saleExpirationDate = new Date(createProductDto.saleExpiration);
+
     const persistedProduct = await this.prisma.product.create({
-      data: createProductDto,
+      data: {
+        ...createProductDto,
+        saleExpiration: saleExpirationDate,
+      },
     });
 
     return {

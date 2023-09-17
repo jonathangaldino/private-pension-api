@@ -1,7 +1,7 @@
 export class ProductEntity {
   id: string;
   susep: string;
-  saleExpiration: string;
+  saleExpiration: Date;
   minimumInitialContributionAmount: number;
   minimumExtraContributionAmount: number;
   minEntryAge: number; // age like

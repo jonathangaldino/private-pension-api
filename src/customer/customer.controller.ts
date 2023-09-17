@@ -3,7 +3,10 @@ import { FastifyReply } from 'fastify';
 
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ZodValidationPipe } from 'src/core/pipes/ZodValidationPipe';
-import { DuplicatedFieldsError } from './customer.errors';
+import {
+  DuplicatedFieldsError,
+  InvalidDateOfBirthError,
+} from './customer.errors';
 import { CustomerService } from './customer.service';
 import {
   CreateCustomerDTO,
@@ -19,12 +22,20 @@ export class CustomerController {
   @ApiTags('customers')
   @ApiBody({
     description: 'Create a customer',
-    type: [CreateCustomerPtDTO],
+    type: CreateCustomerPtDTO,
+    required: true,
   })
   // todo: put the error response as well
   @ApiResponse({
     status: 201,
     description: 'The id of the customer.',
+    type: CreateCustomerResponseDTO,
+  })
+  @ApiResponse({
+    status: 400,
+    description: `Multiple reasons:
+     when there is a registered customer with the provided cpf;
+     when there is a registered customer with the provided email.`,
     type: CreateCustomerResponseDTO,
   })
   @Post()
@@ -48,7 +59,13 @@ export class CustomerController {
     if (error instanceof DuplicatedFieldsError) {
       return response
         .code(400)
-        .send({ error: `'cpf' and/or 'email' is duplicated.` });
+        .send({ error: `'cpf' or 'email' is duplicated.` });
+    }
+
+    if (error instanceof InvalidDateOfBirthError) {
+      return response.code(400).send({
+        error: `'dataDeNascimento' is invalid. Expected DateTime with timezone.`,
+      });
     }
 
     return response.code(201).send({

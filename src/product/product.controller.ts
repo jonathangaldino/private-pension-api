@@ -1,12 +1,14 @@
 import { Body, Controller, Post, Res, UsePipes } from '@nestjs/common';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FastifyReply } from 'fastify';
 import { ZodValidationPipe } from 'src/core/pipes/ZodValidationPipe';
 import {
   CreateProductDTO,
   CreateProductPtDTO,
   CreateProductPtDTOSchema,
+  CreateProductResponseDTO,
 } from './dto/create-product.dto';
+import { InvalidSaleExpirationDateError } from './product.errors';
 import { ProductService } from './product.service';
 
 @Controller('products')
@@ -15,8 +17,14 @@ export class ProductController {
 
   @ApiTags('products')
   @ApiBody({
-    description: 'Create a product',
-    type: [CreateProductPtDTO],
+    description: 'Create a product.',
+    type: CreateProductPtDTO,
+    required: true,
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'The id of the product.',
+    type: CreateProductResponseDTO,
   })
   @Post()
   @UsePipes(new ZodValidationPipe(CreateProductPtDTOSchema))
@@ -35,8 +43,12 @@ export class ProductController {
       maxEntryAge: ptbrDTO.idadeDeSaida,
     };
 
-    const { data: product } =
+    const { error, data: product } =
       await this.productService.create(createProductDTO);
+
+    if (error instanceof InvalidSaleExpirationDateError) {
+      return response.code(400).send({ error: error.message });
+    }
 
     return response.code(201).send({
       id: product.id,
