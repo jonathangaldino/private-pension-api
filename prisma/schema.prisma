@@ -48,6 +48,7 @@ model Plan {
   product        Product          @relation(fields: [productId], references: [id])
   customer       Customer         @relation(fields: [customerId], references: [id])
   PlanInvestment PlanInvestment[]
+  Claim          Claim[]
 
   @@unique([id, customerId, productId])
 }
@@ -60,4 +61,14 @@ model PlanInvestment {
 
   plan     Plan     @relation(fields: [planId], references: [id])
   customer Customer @relation(fields: [customerId], references: [id])
+}
+
+model Claim {
+  id     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  planId String @db.Uuid
+  amount Float
+
+  createdAt DateTime @default(now())
+
+  plan Plan @relation(fields: [planId], references: [id])
 }
