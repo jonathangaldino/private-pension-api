@@ -45,3 +45,11 @@ export class HiringDateAfterExpirationDateError extends UseCaseError {
     super('This hiring date is expired for the selected plan.');
   }
 }
+
+export class PlanNotFoundError extends UseCaseError {
+  description = 'Plan was not found.';
+
+  constructor() {
+    super('Plan not found');
+  }
+}

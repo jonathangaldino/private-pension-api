@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Res, UsePipes } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FastifyReply } from 'fastify';
+import { APIErrorResponse } from 'src/core/controller.errors';
 import { ZodValidationPipe } from 'src/core/pipes/ZodValidationPipe';
 import {
   CreateProductDTO,
@@ -25,6 +26,11 @@ export class ProductController {
     status: 201,
     description: 'The id of the product.',
     type: CreateProductResponseDTO,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid expiracaoDeVenda - expected DateTime with timezone.',
+    type: APIErrorResponse,
   })
   @Post()
   @UsePipes(new ZodValidationPipe(CreateProductPtDTOSchema))

@@ -2,6 +2,7 @@ import { Body, Controller, Post, Res, UsePipes } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { APIErrorResponse } from 'src/core/controller.errors';
 import { ZodValidationPipe } from 'src/core/pipes/ZodValidationPipe';
 import {
   DuplicatedFieldsError,
@@ -36,7 +37,7 @@ export class CustomerController {
     description: `Multiple reasons:
      when there is a registered customer with the provided cpf;
      when there is a registered customer with the provided email.`,
-    type: CreateCustomerResponseDTO,
+    type: APIErrorResponse,
   })
   @Post()
   @UsePipes(new ZodValidationPipe(CreateCustomerPtDTOSchema))

@@ -11,14 +11,15 @@ datasource db {
 }
 
 model Customer {
-  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name          String   @db.VarChar(150)
-  identity      String   @unique @db.VarChar(11)
-  email         String   @unique @db.VarChar(50)
-  dateOfBirth   DateTime
-  gender        String   @db.VarChar(9)
-  monthlyIncome Float
-  plans         Plan[]
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String           @db.VarChar(150)
+  identity       String           @unique @db.VarChar(11)
+  email          String           @unique @db.VarChar(50)
+  dateOfBirth    DateTime
+  gender         String           @db.VarChar(9)
+  monthlyIncome  Float
+  plans          Plan[]
+  PlanInvestment PlanInvestment[]
 }
 
 model Product {
@@ -44,8 +45,19 @@ model Plan {
   hiringDate                DateTime
   retirementAge             Int // age like
 
-  product  Product  @relation(fields: [productId], references: [id])
-  customer Customer @relation(fields: [customerId], references: [id])
+  product        Product          @relation(fields: [productId], references: [id])
+  customer       Customer         @relation(fields: [customerId], references: [id])
+  PlanInvestment PlanInvestment[]
 
   @@unique([id, customerId, productId])
+}
+
+model PlanInvestment {
+  id                 String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  customerId         String @db.Uuid
+  planId             String @db.Uuid
+  contributionAmount Float
+
+  plan     Plan     @relation(fields: [planId], references: [id])
+  customer Customer @relation(fields: [customerId], references: [id])
 }

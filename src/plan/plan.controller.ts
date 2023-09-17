@@ -51,6 +51,11 @@ export class PlanController {
       when the hiring date is invalid or incorrect.`,
     type: APIErrorResponse,
   })
+  @ApiResponse({
+    status: 409,
+    description: `When the plan was already hired by this customer.`,
+    type: APIErrorResponse,
+  })
   @UsePipes(new ZodValidationPipe(CreatePlanPtDTOSchema))
   @Post()
   async create(
