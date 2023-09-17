@@ -36,20 +36,4 @@ export class CustomerService {
       error: null,
     };
   }
-
-  findAll() {
-    return `This action returns all customer`;
-  }
-
-  findOne(id: string) {
-    return `This action returns a #${id} customer`;
-  }
-
-  update(id: string) {
-    return `This action updates a #${id} customer`;
-  }
-
-  remove(id: string) {
-    return `This action removes a #${id} customer`;
-  }
 }

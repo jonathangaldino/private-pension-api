@@ -21,6 +21,7 @@ export class CustomerController {
     description: 'Create a customer',
     type: [CreateCustomerPtDTO],
   })
+  // todo: put the error response as well
   @ApiResponse({
     status: 201,
     description: 'The id of the customer.',

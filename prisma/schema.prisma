@@ -19,3 +19,17 @@ model Customer {
   gender        String @db.VarChar(9)
   monthlyIncome Float
 }
+
+model Product {
+  id                               String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  // Should the susep be unique?
+  // perhaps an email to confirm that?
+  susep                            String @db.VarChar(150)
+  saleExpiration                   String
+  minimumInitialContributionAmount Float
+  minimumExtraContributionAmount   Float
+  minEntryAge                      Int // age like
+  maxEntryAge                      Int // age like
+  initialNeedForRedemption         Int // in days
+  waitingPeriodBetweenRedemptions  Int // in days
+}
