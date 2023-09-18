@@ -3,6 +3,7 @@ import { FastifyReply } from 'fastify';
 import { ZodValidationPipe } from 'src/core/pipes/ZodValidationPipe';
 import { PlanNotFoundError } from 'src/plan/plan.errors';
 import { ProductNotFoundError } from 'src/product/product.errors';
+import { ClaimsSwaggerDecorators } from './claim.decorators';
 import {
   ClaimBeforeInitialNeedForRedemptionError,
   MustWaitBetweenClaimsError,
@@ -19,6 +20,7 @@ import {
 export class ClaimController {
   constructor(private readonly claimService: ClaimService) {}
 
+  @ClaimsSwaggerDecorators()
   @Post()
   @UsePipes(new ZodValidationPipe(CreateClaimPtDTOSchema))
   async create(

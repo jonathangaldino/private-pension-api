@@ -1,7 +1,5 @@
 import { Body, Controller, Post, Res, UsePipes } from '@nestjs/common';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FastifyReply } from 'fastify';
-import { APIErrorResponse } from 'src/core/controller.errors';
 import { ZodValidationPipe } from 'src/core/pipes/ZodValidationPipe';
 import { CustomerNotFoundError } from 'src/customer/customer.errors';
 import { ProductNotFoundError } from 'src/product/product.errors';
@@ -9,8 +7,8 @@ import {
   CreatePlanDTO,
   CreatePlanPtDTO,
   CreatePlanPtDTOSchema,
-  CreatePlanResponseDTO,
 } from './dto/create-plan.dto';
+import { PlansSwaggerDecorators } from './plan.decorators';
 import {
   AlreadyHiredPlanError,
   HiringDateAfterExpirationDateError,
@@ -24,38 +22,7 @@ import { PlanService } from './plan.service';
 export class PlanController {
   constructor(private readonly planService: PlanService) {}
 
-  @ApiTags('plans')
-  @ApiBody({
-    description: 'Hire a private pension plan.',
-    type: CreatePlanPtDTO,
-    required: true,
-  })
-  @ApiResponse({
-    status: 201,
-    description: `The plan is hired.`,
-    type: CreatePlanResponseDTO,
-  })
-  @ApiResponse({
-    status: 404,
-    description: `Multiple reasons:
-      when the product is not found;
-      when the customer is not found.`,
-    type: APIErrorResponse,
-  })
-  @ApiResponse({
-    status: 400,
-    description: `Multiple reasons: 
-      when the hiring date is after the end of the sale of the product; 
-      when the retirement age is not within the range of the product; 
-      when the contribution value is lower then the required by the plan;
-      when the hiring date is invalid or incorrect.`,
-    type: APIErrorResponse,
-  })
-  @ApiResponse({
-    status: 409,
-    description: `When the plan was already hired by this customer.`,
-    type: APIErrorResponse,
-  })
+  @PlansSwaggerDecorators()
   @UsePipes(new ZodValidationPipe(CreatePlanPtDTOSchema))
   @Post()
   async create(

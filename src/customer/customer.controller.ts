@@ -1,9 +1,8 @@
 import { Body, Controller, Post, Res, UsePipes } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { APIErrorResponse } from 'src/core/controller.errors';
 import { ZodValidationPipe } from 'src/core/pipes/ZodValidationPipe';
+import { CustomerSwaggerDecorators } from './customer.decorators';
 import {
   DuplicatedFieldsError,
   InvalidDateOfBirthError,
@@ -13,32 +12,13 @@ import {
   CreateCustomerDTO,
   CreateCustomerPtDTO,
   CreateCustomerPtDTOSchema,
-  CreateCustomerResponseDTO,
 } from './dto/create-customer.dto';
 
 @Controller('customers')
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
-  @ApiTags('customers')
-  @ApiBody({
-    description: 'Create a customer',
-    type: CreateCustomerPtDTO,
-    required: true,
-  })
-  // todo: put the error response as well
-  @ApiResponse({
-    status: 201,
-    description: 'The id of the customer.',
-    type: CreateCustomerResponseDTO,
-  })
-  @ApiResponse({
-    status: 400,
-    description: `Multiple reasons:
-     when there is a registered customer with the provided cpf;
-     when there is a registered customer with the provided email.`,
-    type: APIErrorResponse,
-  })
+  @CustomerSwaggerDecorators()
   @Post()
   @UsePipes(new ZodValidationPipe(CreateCustomerPtDTOSchema))
   async create(
