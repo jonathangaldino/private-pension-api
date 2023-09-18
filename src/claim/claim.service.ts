@@ -28,6 +28,7 @@ export class ClaimService {
     const plan = await this.prisma.plan.findUnique({
       where: {
         id: claimDTO.planId,
+        canceledAt: null,
       },
     });
 
@@ -161,6 +162,20 @@ export class ClaimService {
         amount: claimDTO.claimAmount,
       },
     });
+
+    const newBalance = balance - claimDTO.claimAmount;
+
+    if (newBalance <= 0) {
+      // cancel the plan if there isn't more balance
+      await this.prisma.plan.update({
+        where: {
+          id: plan.id,
+        },
+        data: {
+          canceledAt: new Date(),
+        },
+      });
+    }
 
     return {
       data: claim,

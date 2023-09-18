@@ -38,12 +38,14 @@ model Product {
 }
 
 model Plan {
-  id                        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  customerId                String   @db.Uuid
-  productId                 String   @db.Uuid
+  id                        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  customerId                String    @db.Uuid
+  productId                 String    @db.Uuid
   initialContributionAmount Float
   hiringDate                DateTime
   retirementAge             Int // age like
+  createdAt                 DateTime  @default(now())
+  canceledAt                DateTime?
 
   product        Product          @relation(fields: [productId], references: [id])
   customer       Customer         @relation(fields: [customerId], references: [id])

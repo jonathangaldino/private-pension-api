@@ -37,6 +37,7 @@ export class PlanInvestmentService {
     const plan = await this.prisma.plan.findUnique({
       where: {
         id: planInvestment.planId,
+        canceledAt: null,
       },
     });
 
