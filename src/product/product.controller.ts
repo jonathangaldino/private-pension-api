@@ -1,6 +1,6 @@
 import { Body, Controller, Post, Res, UsePipes } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
-import { ZodValidationPipe } from 'src/core/pipes/ZodValidationPipe';
+import { ZodValidationPipe } from '~/core/pipes/ZodValidationPipe';
 import {
   CreateProductDTO,
   CreateProductPtDTO,

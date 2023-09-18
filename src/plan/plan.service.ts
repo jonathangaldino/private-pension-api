@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { isDateValid } from 'src/core/helpers/dateParser';
-import { ServiceResponse } from 'src/core/interfaces/service.interfaces';
-import { CustomerNotFoundError } from 'src/customer/customer.errors';
-import { PrismaService } from 'src/prisma.service';
-import { ProductNotFoundError } from 'src/product/product.errors';
+import { isDateValid } from '~/core/helpers/dateParser';
+import { ServiceResponse } from '~/core/interfaces/service.interfaces';
+import { CustomerNotFoundError } from '~/customer/customer.errors';
+import { PrismaService } from '~/prisma.service';
+import { ProductNotFoundError } from '~/product/product.errors';
 import { CreatePlanDTO } from './dto/create-plan.dto';
 import { PlanEntity } from './entities/plan.entity';
 import {

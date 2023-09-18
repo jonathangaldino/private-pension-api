@@ -1,4 +1,4 @@
-import { UseCaseError } from 'src/core/known-error';
+import { UseCaseError } from '~/core/known-error';
 
 // todo: find a better name for this
 export class ClaimBeforeInitialNeedForRedemptionError extends UseCaseError {

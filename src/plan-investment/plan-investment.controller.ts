@@ -1,9 +1,9 @@
 import { Body, Controller, Post, Res, UsePipes } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
-import { ZodValidationPipe } from 'src/core/pipes/ZodValidationPipe';
-import { CustomerNotFoundError } from 'src/customer/customer.errors';
-import { PlanNotFoundError } from 'src/plan/plan.errors';
-import { ProductNotFoundError } from 'src/product/product.errors';
+import { ZodValidationPipe } from '~/core/pipes/ZodValidationPipe';
+import { CustomerNotFoundError } from '~/customer/customer.errors';
+import { PlanNotFoundError } from '~/plan/plan.errors';
+import { ProductNotFoundError } from '~/product/product.errors';
 import {
   CreatePlanInvesmentPtDTO,
   CreatePlanInvestmentDTO,

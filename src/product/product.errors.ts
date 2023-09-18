@@ -1,4 +1,4 @@
-import { UseCaseError } from 'src/core/known-error';
+import { UseCaseError } from '~/core/known-error';
 
 export class ProductNotFoundError extends UseCaseError {
   description = 'Product was not found at the database.';

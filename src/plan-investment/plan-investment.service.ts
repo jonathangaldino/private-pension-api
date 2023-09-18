@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PlanInvestment } from '@prisma/client';
-import { ServiceResponse } from 'src/core/interfaces/service.interfaces';
-import { CustomerNotFoundError } from 'src/customer/customer.errors';
-import { PlanNotFoundError } from 'src/plan/plan.errors';
-import { PrismaService } from 'src/prisma.service';
-import { ProductNotFoundError } from 'src/product/product.errors';
+import { ServiceResponse } from '~/core/interfaces/service.interfaces';
+import { CustomerNotFoundError } from '~/customer/customer.errors';
+import { PlanNotFoundError } from '~/plan/plan.errors';
+import { PrismaService } from '~/prisma.service';
+import { ProductNotFoundError } from '~/product/product.errors';
 import { CreatePlanInvestmentDTO } from './dto/create-plan-investment.dto';
 import { MinimumExtraContributionAmountError } from './plan-investment.errors';
 

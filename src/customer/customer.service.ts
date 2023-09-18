@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { isDateValid } from 'src/core/helpers/dateParser';
-import { ServiceResponse } from 'src/core/interfaces/service.interfaces';
-import { PrismaService } from 'src/prisma.service';
+import { isDateValid } from '~/core/helpers/dateParser';
+import { ServiceResponse } from '~/core/interfaces/service.interfaces';
+import { PrismaService } from '~/prisma.service';
 import {
   DuplicatedFieldsError,
   InvalidDateOfBirthError,

@@ -1,4 +1,4 @@
-import { UseCaseError } from 'src/core/known-error';
+import { UseCaseError } from '~/core/known-error';
 
 export class DuplicatedFieldsError extends UseCaseError {
   description =

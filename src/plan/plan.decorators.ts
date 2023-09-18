@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { APIErrorResponse } from 'src/core/controller.errors';
+import { APIErrorResponse } from '~/core/controller.errors';
 import { CreatePlanPtDTO, CreatePlanResponseDTO } from './dto/create-plan.dto';
 
 export function PlansSwaggerDecorators() {

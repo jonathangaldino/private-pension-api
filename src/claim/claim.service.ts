@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { ServiceResponse } from 'src/core/interfaces/service.interfaces';
-import { PlanNotFoundError } from 'src/plan/plan.errors';
-import { PrismaService } from 'src/prisma.service';
-import { ProductNotFoundError } from 'src/product/product.errors';
+import { ServiceResponse } from '~/core/interfaces/service.interfaces';
+import { PlanNotFoundError } from '~/plan/plan.errors';
+import { PrismaService } from '~/prisma.service';
+import { ProductNotFoundError } from '~/product/product.errors';
 import {
   ClaimBeforeInitialNeedForRedemptionError,
   MustWaitBetweenClaimsError,
