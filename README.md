@@ -1,33 +1,19 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This is a tech test, part of an interview process at a company I cannot disclosure.
+
+To understand the requirements of the tech, go to RULES.md.
 
 ## Installation
 
+### Requirements
+- Postgres database (use docker for it)
+- Clone the `.env.example` file and rename it to `.env`.
+
+
+
+
+### Dependencies
 ```bash
 $ pnpm install
 ```
@@ -58,16 +44,25 @@ $ pnpm run test:e2e
 $ pnpm run test:cov
 ```
 
-## Support
+## Running this API on a container
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Dockerfile
 
-## Stay in touch
+- Exposes the default port: 3000
+- Is running the builded files (.js files - the ones that NestJS builds)
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Docker Compose
+Useful for local playground of the api. It will spawn:
+- the api service
+- a postgres database
 
-## License
+When you're running the compose for the first time, the api will crash because the database and migrations are not created yet.
 
-Nest is [MIT licensed](LICENSE).
+For it to work:
+
+On your .env file, you should have `DATABASE_URL` with the following value (example): `DATABASE_URL="postgres://postgres:postgres@postgres:5432/privatepension?schema=public&sslmode=prefer"`.
+
+Run `$ docker compose up` and then, change the `HOST` from the `DATABASE_URL` to `localhost`. E.g:  `DATABASE_URL="postgres://postgres:postgres@localhost:5432/privatepension?schema=public&sslmode=prefer"`
+
+Now, you can create the database and then run the migrations:
+`$ pnpm prisma migrate dev`. Later, restart the api service and you should be good to go.
