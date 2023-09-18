@@ -66,3 +66,5 @@ Run `$ docker compose up` and then, change the `HOST` from the `DATABASE_URL` to
 
 Now, you can create the database and then run the migrations:
 `$ pnpm prisma migrate dev`. Later, restart the api service and you should be good to go.
+
+[Documentation](https://notiz.dev/blog/dockerizing-nestjs-with-prisma-and-postgresql)
