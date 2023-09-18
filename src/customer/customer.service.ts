@@ -20,12 +20,6 @@ export class CustomerService {
   async create(
     customer: CreateCustomerDTO,
   ): Promise<ServiceResponse<CustomerEntity, CustomerServiceErrors>> {
-    const duplicatedCustomers = await this.prisma.customer.findMany({
-      where: {
-        OR: [{ email: customer.email, identity: customer.identity }],
-      },
-    });
-
     if (!isDateValid(customer.dateOfBirth)) {
       return {
         error: new InvalidDateOfBirthError(),
@@ -33,7 +27,11 @@ export class CustomerService {
       };
     }
 
-    const dob = new Date(customer.dateOfBirth);
+    const duplicatedCustomers = await this.prisma.customer.findMany({
+      where: {
+        OR: [{ email: customer.email }, { identity: customer.identity }],
+      },
+    });
 
     if (duplicatedCustomers.length) {
       return {
@@ -42,6 +40,8 @@ export class CustomerService {
       };
     }
 
+    const dob = new Date(customer.dateOfBirth);
+
     const persistedCustomer = await this.prisma.customer.create({
       data: {
         ...customer,
@@ -49,8 +49,10 @@ export class CustomerService {
       },
     });
 
+    const customerEntity = new CustomerEntity(persistedCustomer);
+
     return {
-      data: persistedCustomer,
+      data: customerEntity,
       error: null,
     };
   }

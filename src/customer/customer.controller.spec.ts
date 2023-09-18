@@ -1,21 +1,61 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from '~/prisma.service';
-import { CustomerController } from './customer.controller';
-import { CustomerService } from './customer.service';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
+import { Test } from '@nestjs/testing';
+import { CustomerFactory } from '../../test/modules/customer/customer.factory';
+import { CustomerModule } from './customer.module';
 
 describe('CustomerController', () => {
-  let controller: CustomerController;
+  let app: NestFastifyApplication;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [CustomerController],
-      providers: [CustomerService, PrismaService],
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [CustomerModule],
     }).compile();
 
-    controller = module.get<CustomerController>(CustomerController);
+    app = moduleRef.createNestApplication<NestFastifyApplication>(
+      new FastifyAdapter(),
+    );
+
+    await app.init();
+    await app.getHttpAdapter().getInstance().ready();
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  it('POST /customers - should return 201 created', async () => {
+    const body = CustomerFactory.createCustomerPtDTO();
+
+    return app
+      .inject({
+        method: 'POST',
+        url: '/customers',
+        body,
+      })
+      .then((res) => {
+        expect(res.statusCode).toEqual(201);
+        expect(JSON.parse(res.body)).toHaveProperty('id', expect.any(String));
+      });
+  });
+
+  it('POST /customers - should return 201 created', async () => {
+    const body = CustomerFactory.createCustomerPtDTO();
+
+    // create the first time
+    await app.inject({
+      method: 'POST',
+      url: '/customers',
+      body,
+    });
+
+    // create the second time
+    return app
+      .inject({
+        method: 'POST',
+        url: '/customers',
+        body,
+      })
+      .then((res) => {
+        expect(res.statusCode).toEqual(400);
+      });
   });
 });
