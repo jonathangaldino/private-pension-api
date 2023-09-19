@@ -96,7 +96,7 @@ export class ProductFactory {
   ): Promise<ProductEntity> {
     const dto = this.createProductDTO();
 
-    const persistedCustomer = await prisma.product.create({
+    const persistedProduct = await prisma.product.create({
       data: product || {
         ...dto,
         saleExpiration: new Date(dto.saleExpiration),
@@ -104,6 +104,6 @@ export class ProductFactory {
       },
     });
 
-    return new ProductEntity(persistedCustomer);
+    return new ProductEntity(persistedProduct);
   }
 }

@@ -64,7 +64,7 @@ export class PlanService {
     }
 
     const isHiringDateAfterSaleExpirationDate =
-      new Date(createPlanDTO.hiringDate) < product.saleExpiration;
+      new Date(createPlanDTO.hiringDate) > product.saleExpiration;
 
     if (isHiringDateAfterSaleExpirationDate) {
       return {
@@ -112,12 +112,12 @@ export class PlanService {
     }
 
     // hire the plan
-    const plan = await this.prisma.plan.create({
+    const persistedPlan = await this.prisma.plan.create({
       data: createPlanDTO,
     });
 
     return {
-      data: plan,
+      data: new PlanEntity(persistedPlan),
       error: null,
     };
   }

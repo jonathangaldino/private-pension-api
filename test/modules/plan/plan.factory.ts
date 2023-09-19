@@ -1,6 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { CustomerEntity } from '~/customer/entities/customer.entity';
-import { CreatePlanDTO } from '~/plan/dto/create-plan.dto';
+import { CreatePlanDTO, CreatePlanPtDTO } from '~/plan/dto/create-plan.dto';
+import { PlanEntity } from '~/plan/entities/plan.entity';
+import { PrismaService } from '~/prisma.service';
 import { ProductEntity } from '~/product/entities/product.entity';
 
 export class PlanFactory {
@@ -12,10 +14,71 @@ export class PlanFactory {
     return {
       customerId: customer?.id || faker.string.uuid(),
       productId: product?.id || faker.string.uuid(),
-      hiringDate: faker.date.recent({ days: 10 }).toString(),
-      retirementAge: faker.number.int({ min: 5, max: 100 }),
-      initialContributionAmount: faker.number.int({ min: 200, max: 1000 }),
+      hiringDate: faker.date
+        .past({
+          years: 1,
+          refDate: product?.saleExpiration || new Date(),
+        })
+        .toISOString(),
+      retirementAge:
+        product?.minEntryAge && product?.maxEntryAge
+          ? faker.number.int({
+              min: product.minEntryAge,
+              max: product.maxEntryAge,
+            })
+          : faker.number.int({ max: 80 }),
+      initialContributionAmount: faker.number.int({
+        min: product?.minimumInitialContributionAmount || 100,
+        max: 1000,
+      }),
       ...params,
     };
+  }
+
+  static createPlanPtDTO(
+    customer?: CustomerEntity,
+    product?: ProductEntity,
+    params?: Partial<CreatePlanPtDTO>,
+  ): CreatePlanPtDTO {
+    return {
+      idCliente: customer?.id || faker.string.uuid(),
+      idProduto: product?.id || faker.string.uuid(),
+      dataDaContratacao: faker.date
+        .past({
+          years: 1,
+          refDate: product?.saleExpiration || new Date(),
+        })
+        .toISOString(),
+      idadeDeAposentadoria:
+        product?.minEntryAge && product?.maxEntryAge
+          ? faker.number.int({
+              min: product.minEntryAge,
+              max: product.maxEntryAge,
+            })
+          : faker.number.int(),
+      aporte: faker.number.int({
+        min: product?.minimumInitialContributionAmount || 100,
+        max: 1000,
+      }),
+      ...params,
+    };
+  }
+
+  static async createPlanEntity(
+    prisma: PrismaService,
+    plan?: Partial<Omit<PlanEntity, 'id'>>,
+    params?: Partial<PlanEntity>,
+  ): Promise<PlanEntity> {
+    const dto = this.createPlanDTO();
+
+    const persistedPlan = await prisma.plan.create({
+      data: {
+        ...dto,
+        hiringDate: new Date(dto.hiringDate),
+        ...params,
+      },
+    });
+
+    return new PlanEntity(persistedPlan);
   }
 }
