@@ -64,7 +64,7 @@ export class PlanService {
     }
 
     const isHiringDateAfterSaleExpirationDate =
-      new Date(createPlanDTO.hiringDate) > product.saleExpiration;
+      new Date(createPlanDTO.hiringDate) < product.saleExpiration;
 
     if (isHiringDateAfterSaleExpirationDate) {
       return {

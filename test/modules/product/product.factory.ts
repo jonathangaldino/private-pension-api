@@ -1,8 +1,10 @@
 import { faker } from '@faker-js/faker';
+import { PrismaService } from '~/prisma.service';
 import {
   CreateProductDTO,
   CreateProductPtDTO,
 } from '~/product/dto/create-product.dto';
+import { ProductEntity } from '~/product/entities/product.entity';
 
 export class ProductFactory {
   static createProductDTO(
@@ -85,5 +87,23 @@ export class ProductFactory {
       idadeDeSaida: 60,
       ...params,
     };
+  }
+
+  static async createProductEntity(
+    prisma: PrismaService,
+    product?: Omit<ProductEntity, 'id'>,
+    params?: Partial<ProductEntity>,
+  ): Promise<ProductEntity> {
+    const dto = this.createProductDTO();
+
+    const persistedCustomer = await prisma.product.create({
+      data: product || {
+        ...dto,
+        saleExpiration: new Date(dto.saleExpiration),
+        ...params,
+      },
+    });
+
+    return new ProductEntity(persistedCustomer);
   }
 }

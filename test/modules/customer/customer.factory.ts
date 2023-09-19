@@ -3,6 +3,8 @@ import {
   CreateCustomerDTO,
   CreateCustomerPtDTO,
 } from '~/customer/dto/create-customer.dto';
+import { CustomerEntity } from '~/customer/entities/customer.entity';
+import { PrismaService } from '~/prisma.service';
 
 export class CustomerFactory {
   static createCustomerPtDTO(
@@ -31,5 +33,21 @@ export class CustomerFactory {
       monthlyIncome: 2000.0,
       ...params,
     };
+  }
+
+  static async createCustomerEntity(
+    prisma: PrismaService,
+    customer?: Omit<CustomerEntity, 'id'>,
+  ): Promise<CustomerEntity> {
+    const dto = this.createCustomerDTO();
+
+    const persistedCustomer = await prisma.customer.create({
+      data: customer || {
+        ...dto,
+        dateOfBirth: new Date(dto.dateOfBirth),
+      },
+    });
+
+    return new CustomerEntity(persistedCustomer);
   }
 }
