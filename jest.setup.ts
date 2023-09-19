@@ -4,6 +4,7 @@ import * as dotenv from 'dotenv';
 import NodeEnvironment from 'jest-environment-node';
 import { exec } from 'node:child_process';
 import { Client } from 'pg';
+import { exit } from 'process';
 import { promisify } from 'util';
 dotenv.config({ path: '.env.testing' });
 
@@ -22,9 +23,17 @@ export default class PrismaTestEnvironment extends NodeEnvironment {
 
     const dbUser = process.env.POSTGRES_USER;
     const dbPass = process.env.POSTGRES_PASSWORD;
+    const dbName = process.env.POSTGRES_DB;
+
+    if (!dbUser || !dbPass || !dbName) {
+      throw new Error(
+        `Env variables for testing not found. Forgot to create .env.testing file?`,
+      );
+      exit(1);
+    }
+
     const dbHost = 'localhost';
     const dbPort = '5432';
-    const dbName = process.env.POSTGRES_DB;
 
     this.schema = `test_${randomUUID()}`;
     this.connectionString = `postgresql://${dbUser}:${dbPass}@${dbHost}:${dbPort}/${dbName}?schema=${this.schema}`;
