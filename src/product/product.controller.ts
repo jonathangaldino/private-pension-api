@@ -23,6 +23,7 @@ export class ProductController {
   ) {
     const createProductDTO: CreateProductDTO = {
       susep: ptbrDTO.susep,
+      name: ptbrDTO.nome,
       saleExpiration: ptbrDTO.expiracaoDeVenda,
       minimumInitialContributionAmount: ptbrDTO.valorMinimoAporteInicial,
       minimumExtraContributionAmount: ptbrDTO.valorMinimoAporteExtra,

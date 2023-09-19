@@ -62,6 +62,7 @@ export class CreateProductResponseDTO {
 
 export class CreateProductDTO {
   susep: string;
+  name: string;
   saleExpiration: string;
   minimumInitialContributionAmount: number;
   minimumExtraContributionAmount: number;

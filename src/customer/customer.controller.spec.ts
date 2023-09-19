@@ -37,7 +37,7 @@ describe('CustomerController', () => {
       });
   });
 
-  it('POST /customers - should return 201 created', async () => {
+  it('POST /customers - should return 400 when identity fields are duplicated', async () => {
     const body = CustomerFactory.createCustomerPtDTO();
 
     // create the first time

@@ -32,7 +32,7 @@ export class ProductService {
     });
 
     return {
-      data: persistedProduct,
+      data: new ProductEntity(persistedProduct),
       error: null,
     };
   }
