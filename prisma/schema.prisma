@@ -26,6 +26,7 @@ model Product {
   id                               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   // Should the susep be unique?
   // perhaps an email to confirm that?
+  name                             String
   susep                            String   @db.VarChar(150)
   saleExpiration                   DateTime
   minimumInitialContributionAmount Float
