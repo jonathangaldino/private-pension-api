@@ -10,6 +10,7 @@ To understand the requirements of the tech, go to INSTRUCTIONS.md.>
 - Postgres database (use docker for it)
 - Clone the `.env.example` file and rename it to `.env`.
 
+[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Private%20Pension%20API&uri=https%3A%2F%2Fgist.github.com%2Fjonathangaldino%2F3804f1a0117f693961b6b771b60c90d6)
 
 ### Dependencies
 ```bash
