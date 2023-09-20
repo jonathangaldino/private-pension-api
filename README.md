@@ -2,15 +2,13 @@
 
 This is a tech test, part of an interview process at a company I cannot disclosure.
 
-To understand the requirements of the tech, go to RULES.md.
+To understand the requirements of the tech, go to INSTRUCTIONS.md.>
 
 ## Installation
 
 ### Requirements
 - Postgres database (use docker for it)
 - Clone the `.env.example` file and rename it to `.env`.
-
-
 
 
 ### Dependencies
@@ -43,6 +41,10 @@ $ pnpm run test:e2e
 # test coverage
 $ pnpm run test:cov
 ```
+
+## Swagger documentation
+
+Go to `http://localhost:3000/api`
 
 ## Running this API on a container
 
