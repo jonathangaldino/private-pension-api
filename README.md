@@ -19,7 +19,13 @@ $ pnpm install
 
 ## Running the app
 
+
 ```bash
+# copy env variables
+# make sure to modify the postgres connection to the right one
+$ cp .env.example .env
+
+
 # development
 $ pnpm run start
 
@@ -32,16 +38,20 @@ $ pnpm run start:prod
 
 ## Test
 
+# copy env variables
+# make sure to modify the postgres connection to the right one
+$ cp .env.example .env.testing
+
 ```bash
 # unit tests
 $ pnpm run test
 
-# e2e tests
-$ pnpm run test:e2e
-
 # test coverage
 $ pnpm run test:cov
 ```
+
+Controller tests were made using Supertest, so the request is 'actually' made.
+That's why we don't have any e2e tests, but we have integration ones.
 
 ## Swagger documentation
 
