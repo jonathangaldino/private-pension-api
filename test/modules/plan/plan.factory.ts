@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { Prisma } from '@prisma/client';
 import { CustomerEntity } from '~/customer/entities/customer.entity';
 import { CreatePlanDTO, CreatePlanPtDTO } from '~/plan/dto/create-plan.dto';
 import { PlanEntity } from '~/plan/entities/plan.entity';
@@ -71,12 +72,14 @@ export class PlanFactory {
   ): Promise<PlanEntity> {
     const dto = this.createPlanDTO();
 
+    const dataToInsert: Prisma.PlanUncheckedCreateInput = {
+      ...dto,
+      ...plan,
+      ...params,
+    };
+
     const persistedPlan = await prisma.plan.create({
-      data: {
-        ...dto,
-        hiringDate: new Date(dto.hiringDate),
-        ...params,
-      },
+      data: dataToInsert,
     });
 
     return new PlanEntity(persistedPlan);

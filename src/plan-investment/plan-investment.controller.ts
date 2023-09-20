@@ -3,7 +3,6 @@ import { FastifyReply } from 'fastify';
 import { ZodValidationPipe } from '~/core/pipes/ZodValidationPipe';
 import { CustomerNotFoundError } from '~/customer/customer.errors';
 import { PlanNotFoundError } from '~/plan/plan.errors';
-import { ProductNotFoundError } from '~/product/product.errors';
 import {
   CreatePlanInvesmentPtDTO,
   CreatePlanInvestmentDTO,
@@ -35,8 +34,7 @@ export class PlanInvestmentController {
 
     if (
       error instanceof CustomerNotFoundError ||
-      error instanceof PlanNotFoundError ||
-      error instanceof ProductNotFoundError
+      error instanceof PlanNotFoundError
     ) {
       return response.code(404).send({ error: error.message });
     }

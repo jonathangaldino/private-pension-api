@@ -22,7 +22,7 @@ describe('ProductController', () => {
     await app.getHttpAdapter().getInstance().ready();
   });
 
-  it('POST /products - should return 400 created', async () => {
+  it('POST /products - should return 400', async () => {
     const body = ProductFactory.createProductPtDTO();
 
     return app
@@ -35,7 +35,6 @@ describe('ProductController', () => {
         },
       })
       .then((res) => {
-        console.log(res.body);
         expect(res.statusCode).toEqual(400);
       });
   });

@@ -1,17 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { PlanInvestment } from '@prisma/client';
 import { ServiceResponse } from '~/core/interfaces/service.interfaces';
 import { CustomerNotFoundError } from '~/customer/customer.errors';
 import { PlanNotFoundError } from '~/plan/plan.errors';
 import { PrismaService } from '~/prisma.service';
-import { ProductNotFoundError } from '~/product/product.errors';
 import { CreatePlanInvestmentDTO } from './dto/create-plan-investment.dto';
+import { PlanInvestmentEntity } from './entities/plan-investment.entity';
 import { MinimumExtraContributionAmountError } from './plan-investment.errors';
 
 export type PlanInvestmentServiceErrors =
   | CustomerNotFoundError
   | PlanNotFoundError
-  | ProductNotFoundError
   | MinimumExtraContributionAmountError;
 
 @Injectable()
@@ -20,7 +18,9 @@ export class PlanInvestmentService {
 
   async create(
     planInvestment: CreatePlanInvestmentDTO,
-  ): Promise<ServiceResponse<PlanInvestment, PlanInvestmentServiceErrors>> {
+  ): Promise<
+    ServiceResponse<PlanInvestmentEntity, PlanInvestmentServiceErrors>
+  > {
     const customer = await this.prisma.customer.findUnique({
       where: {
         id: planInvestment.customerId,
@@ -39,6 +39,9 @@ export class PlanInvestmentService {
         id: planInvestment.planId,
         canceledAt: null,
       },
+      include: {
+        product: true,
+      },
     });
 
     if (!plan) {
@@ -48,19 +51,7 @@ export class PlanInvestmentService {
       };
     }
 
-    const product = await this.prisma.product.findUnique({
-      where: {
-        id: plan.productId,
-      },
-    });
-
-    if (!product) {
-      // this shouldn't happen but let's handle it
-      return {
-        error: new ProductNotFoundError(),
-        data: null,
-      };
-    }
+    const { product } = plan;
 
     if (
       planInvestment.contributionAmount < product.minimumExtraContributionAmount
@@ -81,7 +72,7 @@ export class PlanInvestmentService {
 
     return {
       error: null,
-      data: persistedPlanInvestment,
+      data: new PlanInvestmentEntity(persistedPlanInvestment),
     };
   }
 }
