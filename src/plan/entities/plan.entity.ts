@@ -5,6 +5,7 @@ type EntityParams = {
   initialContributionAmount: number;
   hiringDate: Date;
   retirementAge: number;
+  canceledAt?: Date;
 };
 
 export class PlanEntity {
@@ -14,6 +15,7 @@ export class PlanEntity {
   readonly initialContributionAmount: number;
   readonly hiringDate: Date;
   readonly retirementAge: number;
+  readonly canceledAt?: Date;
 
   constructor(params: EntityParams) {
     this.id = params.id;
@@ -22,5 +24,6 @@ export class PlanEntity {
     this.initialContributionAmount = params.initialContributionAmount;
     this.hiringDate = params.hiringDate;
     this.retirementAge = params.retirementAge;
+    this.canceledAt = params.canceledAt;
   }
 }

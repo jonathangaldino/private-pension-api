@@ -3,7 +3,9 @@ import {
   CreatePlanInvesmentPtDTO,
   CreatePlanInvestmentDTO,
 } from '~/plan-investment/dto/create-plan-investment.dto';
+import { PlanInvestmentEntity } from '~/plan-investment/entities/plan-investment.entity';
 import { PlanEntity } from '~/plan/entities/plan.entity';
+import { PrismaService } from '~/prisma.service';
 
 export class PlanInvestmentFactory {
   static createPlanInvestmentDTO(
@@ -31,21 +33,22 @@ export class PlanInvestmentFactory {
     };
   }
 
-  // static async createPlanInvestmentEntity(
-  //   prisma: PrismaService,
-  //   plan?: Partial<Omit<PlanEntity, 'id'>>,
-  //   params?: Partial<PlanEntity>,
-  // ): Promise<PlanEntity> {
-  //   const dto = this.createPlanDTO();
+  static async createPlanInvestmentEntity(
+    prisma: PrismaService,
+    params?: Partial<PlanInvestmentEntity>,
+    plan?: PlanEntity,
+  ): Promise<PlanInvestmentEntity> {
+    const dto = this.createPlanInvestmentDTO();
 
-  //   const persistedPlan = await prisma.plan.create({
-  //     data: {
-  //       ...dto,
-  //       hiringDate: new Date(dto.hiringDate),
-  //       ...params,
-  //     },
-  //   });
+    const persistedPlan = await prisma.planInvestment.create({
+      data: {
+        ...dto,
+        customerId: plan?.customerId || dto.customerId,
+        planId: plan?.id || dto.planId,
+        ...params,
+      },
+    });
 
-  //   return new PlanEntity(persistedPlan);
-  // }
+    return new PlanInvestmentEntity(persistedPlan);
+  }
 }

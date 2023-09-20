@@ -5,7 +5,9 @@ export class ClaimBeforeInitialNeedForRedemptionError extends UseCaseError {
   description = 'When trying to claim before initial need for redemption date';
 
   constructor() {
-    super('Expected DateTime with Timezone');
+    super(
+      'Not possible to claim before the initial days setup by the product.',
+    );
   }
 }
 

@@ -2,7 +2,6 @@ import { Body, Controller, Post, Res, UsePipes } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 import { ZodValidationPipe } from '~/core/pipes/ZodValidationPipe';
 import { PlanNotFoundError } from '~/plan/plan.errors';
-import { ProductNotFoundError } from '~/product/product.errors';
 import { ClaimsSwaggerDecorators } from './claim.decorators';
 import {
   ClaimBeforeInitialNeedForRedemptionError,
@@ -35,10 +34,7 @@ export class ClaimController {
     const { error, data: claim } =
       await this.claimService.create(createClaimDTO);
 
-    if (
-      error instanceof PlanNotFoundError ||
-      error instanceof ProductNotFoundError
-    ) {
+    if (error instanceof PlanNotFoundError) {
       return response.code(404).send({ error: error.message });
     }
 

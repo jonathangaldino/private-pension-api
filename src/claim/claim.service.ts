@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ServiceResponse } from '~/core/interfaces/service.interfaces';
 import { PlanNotFoundError } from '~/plan/plan.errors';
 import { PrismaService } from '~/prisma.service';
-import { ProductNotFoundError } from '~/product/product.errors';
 import {
   ClaimBeforeInitialNeedForRedemptionError,
   MustWaitBetweenClaimsError,
@@ -13,7 +12,6 @@ import { ClaimEntity } from './entities/claim.entity';
 
 export type ClaimServiceErrors =
   | PlanNotFoundError
-  | ProductNotFoundError
   | ClaimBeforeInitialNeedForRedemptionError
   | NotEnoughtBalanceError
   | MustWaitBetweenClaimsError;
@@ -30,6 +28,9 @@ export class ClaimService {
         id: claimDTO.planId,
         canceledAt: null,
       },
+      include: {
+        product: true,
+      },
     });
 
     if (!plan) {
@@ -39,18 +40,7 @@ export class ClaimService {
       };
     }
 
-    const product = await this.prisma.product.findUnique({
-      where: {
-        id: plan.productId,
-      },
-    });
-
-    if (!product) {
-      return {
-        error: new ProductNotFoundError(),
-        data: null,
-      };
-    }
+    const { product } = plan;
 
     const {
       _sum: { contributionAmount },
@@ -178,7 +168,7 @@ export class ClaimService {
     }
 
     return {
-      data: claim,
+      data: new ClaimEntity(claim),
       error: null,
     };
   }
